@@ -43,7 +43,7 @@ namespace WpfAK7PD.Managers
             }
         }
 
-        public async Task<bool> CreateOrdinaryUserAsync(User user)
+        public async Task<bool> CreateUserAsync(User user)
         {
             try
             {
