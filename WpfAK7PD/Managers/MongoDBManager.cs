@@ -38,7 +38,7 @@ namespace WpfAK7PD.Managers
             }
             catch (Exception e)
             {
-
+                throw;
             }
         }
 
@@ -51,7 +51,7 @@ namespace WpfAK7PD.Managers
             }
             catch (Exception e)
             {
-
+                throw;
             }
             return false;
         }
@@ -69,7 +69,7 @@ namespace WpfAK7PD.Managers
             }
             catch (Exception e)
             {
-
+                throw;
             }
             return null;
         }
@@ -84,13 +84,14 @@ namespace WpfAK7PD.Managers
             }
             catch (Exception e)
             {
-
+                throw;
             }
             return userBooks;
         }
 
         public async Task<List<Book>> GetBooks()
         {
+            BookCollection = null;
             List<Book> books = new List<Book>();
             try
             {
@@ -98,7 +99,7 @@ namespace WpfAK7PD.Managers
             }
             catch (Exception e)
             {
-
+                throw;
             }
             return books;
         }
@@ -111,7 +112,19 @@ namespace WpfAK7PD.Managers
             }
             catch (Exception e)
             {
+                throw;
+            }
+        }
 
+        public async Task CreateUserBook(UserBook userBook)
+        {
+            try
+            {
+                await UserBookCollection.InsertOneAsync(userBook);
+            }
+            catch (Exception e)
+            {
+                throw;
             }
         }
     }

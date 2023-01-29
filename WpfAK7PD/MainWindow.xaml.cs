@@ -24,11 +24,11 @@ namespace WpfAK7PD
     public partial class MainWindow : Window
     {
         public MongoDBManager Manager = new MongoDBManager("mongodb+srv://utb:barbari@knihovna.cmf7vc6.mongodb.net/?retryWrites=true&w=majority");
-        public User LoggedUser { get; set; }
+        public User LoggedUser { get; set; } = new User();
         public MainWindow()
         {
             InitializeComponent();
-            
+
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -41,9 +41,9 @@ namespace WpfAK7PD
                 LastName = "Kozak",
                 Address = new Address()
                 {
-                     City = "Kroměříž",
-                     Street = "Zborovská 4180",
-                     ZipCode = "76701"
+                    City = "Kroměříž",
+                    Street = "Zborovská 4180",
+                    ZipCode = "76701"
                 }
             };
             bool res = await Manager.CreateOrdinaryUserAsync(newUser);
@@ -56,8 +56,16 @@ namespace WpfAK7PD
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            var userBooks = Manager.GetUserBooks(LoggedUser);
-            var books = Manager.GetBooks();
+            try
+            {
+                var userBooks = await Manager.GetUserBooks(LoggedUser);
+                var books = await Manager.GetBooks();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }
