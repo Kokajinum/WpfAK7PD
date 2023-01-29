@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -36,7 +37,7 @@ namespace WpfAK7PD.Managers
 
                 //List<string> databases = MongoClient.ListDatabaseNames().ToList();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -49,7 +50,7 @@ namespace WpfAK7PD.Managers
                 await UserCollection.InsertOneAsync(user);
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -67,7 +68,7 @@ namespace WpfAK7PD.Managers
                 }
                 return null;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -82,11 +83,35 @@ namespace WpfAK7PD.Managers
                 userBooks = await UserBookCollection.Find(x => x.UserId == user.Id.ToString()).ToListAsync();
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
             return userBooks;
+        }
+
+        public async Task CreateUserBook(UserBook userBook)
+        {
+            try
+            {
+                await UserBookCollection.InsertOneAsync(userBook);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task DeleteUserBook(UserBook userBook)
+        {
+            try
+            {
+                await UserBookCollection.DeleteOneAsync(x => x.Id == userBook.Id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<List<Book>> GetBooks()
@@ -97,7 +122,7 @@ namespace WpfAK7PD.Managers
             {
                 books = await BookCollection.Find(new BsonDocument()).ToListAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -110,22 +135,37 @@ namespace WpfAK7PD.Managers
             {
                 await BookCollection.InsertOneAsync(book);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        public async Task CreateUserBook(UserBook userBook)
+        public async Task DeleteBook(Book book)
         {
             try
             {
-                await UserBookCollection.InsertOneAsync(userBook);
+                await BookCollection.DeleteOneAsync(x => x.Id == book.Id);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
         }
+
+        public async Task UpdateBook(Book book)
+        {
+            try
+            {
+                var filter = Builders<Book>.Filter.Eq("_id", book.Id);
+                await BookCollection.ReplaceOneAsync(filter, book);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        
     }
 }
